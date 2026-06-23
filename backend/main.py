@@ -1,4 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from google import genai
 import os
@@ -11,9 +13,10 @@ app = FastAPI(title="AI SysAdmin Copilot")
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def root():
-    return {"message": "AI SysAdmin Copilot is running!"}
+    with open("templates/index.html", "r") as f:
+        return f.read()
 
 @app.get("/health")
 def health():
